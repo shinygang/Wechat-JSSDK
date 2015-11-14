@@ -15,8 +15,8 @@ namespace WechatSDK
 {
     public class JSSDK
     {
-        private static string wxAppId = "*****";
-        private static string wxAppSecret = "*****";
+        private static string wxAppId = SiteSettings.wxAppId;
+        private static string wxAppSecret = SiteSettings.wxAppSecret;
         //得到数据包，返回使用页面  
         public static Hashtable getSignPackage()
         {
@@ -132,7 +132,8 @@ namespace WechatSDK
                     xml.Save(filepath);
                     ticket = mode.ticket;
                 }
-                else {
+                else
+                {
                     ticket = "";
                 }
             }
