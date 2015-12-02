@@ -17,7 +17,11 @@ namespace WechatSDK
     {
         private static string wxAppId = SiteSettings.wxAppId;
         private static string wxAppSecret = SiteSettings.wxAppSecret;
-        //得到数据包，返回使用页面  
+        /// 得到数据包，返回使用页面 
+        /// <summary>
+        /// 得到数据包，返回使用页面
+        /// </summary>
+        /// <returns></returns>
         public static Hashtable getSignPackage()
         {
             //AccessToken ace = Getaccess();
@@ -72,6 +76,7 @@ namespace WechatSDK
             return signPackage;
         }
 
+        /// 获取token,如果存在且没过期，则直接取token
         /// <summary>
         /// 获取token,如果存在且没过期，则直接取token
         /// </summary>
@@ -90,9 +95,11 @@ namespace WechatSDK
             fs.Dispose();
             string Token = xml.SelectSingleNode("xml").SelectSingleNode("AccessToken").InnerText;
             DateTime AccessTokenExpires = Convert.ToDateTime(xml.SelectSingleNode("xml").SelectSingleNode("AccessExpires").InnerText);
+            //如果token过期，则重新获取token
             if (DateTime.Now >= AccessTokenExpires)
             {
                 AccessToken mode = Getaccess();
+                //将token存到xml文件中，全局缓存
                 xml.SelectSingleNode("xml").SelectSingleNode("AccessToken").InnerText = mode.access_token;
                 DateTime _AccessTokenExpires = DateTime.Now.AddSeconds(mode.expires_in);
                 xml.SelectSingleNode("xml").SelectSingleNode("AccessExpires").InnerText = _AccessTokenExpires.ToString();
@@ -102,8 +109,9 @@ namespace WechatSDK
             return Token;
         }
 
+        /// 获取jsapi_ticket,如果存在且没过期，则直接取jsapi_ticket
         /// <summary>
-        /// 获取token,如果存在且没过期，则直接取token
+        /// 获取jsapi_ticket,如果存在且没过期，则直接取jsapi_ticket
         /// </summary>
         /// <returns></returns>
         public static string GetExistJSTicket()
@@ -120,12 +128,14 @@ namespace WechatSDK
             fs.Dispose();
             string ticket = xml.SelectSingleNode("xml").SelectSingleNode("JSTicket").InnerText;
             DateTime AccessTokenExpires = Convert.ToDateTime(xml.SelectSingleNode("xml").SelectSingleNode("JSAccessExpires").InnerText);
+            //如果jsapi_ticket过期，则重新获取token
             if (DateTime.Now >= AccessTokenExpires)
             {
                 string Token = xml.SelectSingleNode("xml").SelectSingleNode("AccessToken").InnerText;
                 JSTicket mode = getJSTicketTicket(Token);
                 if (mode.ticket != null && mode.expires_in != null)
                 {
+                    //将jsapi_ticket存到xml文件中，全局缓存
                     xml.SelectSingleNode("xml").SelectSingleNode("JSTicket").InnerText = mode.ticket;
                     DateTime _AccessTokenExpires = DateTime.Now.AddSeconds(int.Parse(mode.expires_in));
                     xml.SelectSingleNode("xml").SelectSingleNode("JSAccessExpires").InnerText = _AccessTokenExpires.ToString();
@@ -151,7 +161,11 @@ namespace WechatSDK
             return m;
         }
 
-        //创建随机字符串  
+        /// 创建随机字符串  
+        /// <summary>
+        /// 创建随机字符串
+        /// </summary>
+        /// <returns></returns>
         private static string createNonceStr()
         {
             int length = 16;
@@ -165,7 +179,12 @@ namespace WechatSDK
             return str;
         }
 
-        //得到ticket 如果文件里时间 超时则重新获取  
+        /// 获取jsapi_ticket
+        /// <summary>
+        /// 获取jsapi_ticket
+        /// </summary>
+        /// <param name="access"></param>
+        /// <returns></returns>
         private static JSTicket getJSTicketTicket(string access)
         {
             string Str = GetJson("https://api.weixin.qq.com/cgi-bin/ticket/getticket?AccessToken_token=" + access + "&type=JSTicket");
@@ -199,6 +218,7 @@ namespace WechatSDK
             return str_sha1_out;
         }
 
+        /// 将c# DateTime时间格式转换为Unix时间戳格式  
         /// <summary>  
         /// 将c# DateTime时间格式转换为Unix时间戳格式  
         /// </summary>  
