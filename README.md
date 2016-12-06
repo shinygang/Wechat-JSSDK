@@ -1,6 +1,10 @@
 # Wechat-SDK
 C#版本的微信sdk处理。
 
+-------
+如果你觉得该程序对你有帮助，就打赏作者一杯咖啡吧。
+![pic](https://segmentfault.com/img/bVqVEt)
+
 首先请修改SiteSettings.cs里面的参数
 
 ## JSSDK
